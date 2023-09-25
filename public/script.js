@@ -43,7 +43,11 @@ function generateCards() {
   for (i in currentBoardData.items) {
     let clone2 = document.querySelector("#card-template").content.cloneNode(true);
     let item = currentBoardData.items[i];
-    clone2.querySelector(".img").src = `/resources/assets/${item.image}`;
+    if (item.image) {
+      clone2.querySelector(".img").src = `/resources/assets/${item.image}`;
+    } else {
+      clone2.querySelector(".img").style.display = "none";
+    }
     clone2.querySelector(".text1").innerHTML = item.text1;
     clone2.querySelector(".text2").innerHTML = item.text2;
 
@@ -122,14 +126,18 @@ function cancelEditCard() {
 }
 
 function createNewCard() {
+  file = document.querySelector("#new-card-popup #dragdrop-input").files[0];
+
   currentBoardData.items.push({
-    image: document.querySelector("#new-card-popup #dragdrop-input").files[0].name,
+    image: file ? file.name : "",
     text1: document.querySelector("#new-card-popup #text1-input").value,
     text2: document.querySelector("#new-card-popup #text2-input").value,
     url: document.querySelector("#new-card-popup #url-input").value,
   });
   generateCards();
-  uploadFiles(document.querySelector("#dragdrop-input").files);
+  if (file) {
+    uploadFile(file);
+  }
   console.log("created new card");
   updateBoard(currentBoardIndex);
   cancelNewCard();
@@ -156,10 +164,10 @@ document.querySelector("#dragdrop-container").addEventListener("drop", (e) => {
   }
 });*/
 
-function uploadFiles(files) {
+function uploadFile(file) {
   console.log("uploading file to backend");
-  console.log(files);
-  socket.emit("upload", files[0], files[0].name, (status) => {
+  console.log(file);
+  socket.emit("upload", file, file.name, (status) => {
     console.log(status);
   });
 }
