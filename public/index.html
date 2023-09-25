@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cardboard</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+	<link rel="icon" type="image/x-icon" href="./assets/icon.svg">
+</head>
+
+<body>
+
+	<template id="new-card-button-template">
+		<div id="new-card-button-container">
+			<button class="accent" onclick="newCardDialog()">New Card</button>
+		</div>
+	</template>
+
+	<template id="card-template">
+		<div class="card">
+			<!-- <button>Star</button> -->
+			<button style="float: right;" class="edit-btn">Edit</button>
+			<img class="img">
+			<div style="display: flex; margin-left: 8px; margin-right: 8px; flex-direction: column;
+		">
+				<p class="text1"></p>
+				<div style="display: flex; justify-content: space-between; align-items: center;">
+					<p class="text2"></p>
+					<a class="url"></a>
+				</div>
+			</div>
+
+		</div>
+	</template>
+
+	<div id="app">
+
+		<div id="new-card-popup">
+			<div id="content">
+				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+					<h3>New Card</h3>
+					<button onclick="cancelNewCard()">X</button>
+				</div>
+				<div id="dragdrop-container">
+					Drag and drop or click to browse
+					<input id="dragdrop-input" type="file" onchange="previewFiles(this.files)">
+
+				</div>
+				<input type="text" id="text1-input" placeholder="Text 1">
+				<input type="text" id="text2-input" placeholder="Text 2">
+				<input type="text" id="url-input" placeholder="URL">
+				<button class="accent" style="margin-left: auto;" onclick="createNewCard()">Create Card</button>
+			</div>
+		</div>
+
+		<div id="edit-card-popup">
+			<div id="content">
+				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+					<h3>Edit Card</h3>
+					<button onclick="cancelEditCard()">X</button>
+				</div>
+				<!-- <div id="dragdrop-container"> -->
+				<!-- Drag and drop or click to browse -->
+				<!-- <input id="dragdrop-input" type="file" onchange="previewFiles(this.files)"> -->
+				<!-- </div> -->
+				<input type="text" id="text1-input" placeholder="Text 1">
+				<input type="text" id="text2-input" placeholder="Text 2">
+				<input type="text" id="url-input" placeholder="URL">
+				<div style="display: flex;gap: 8px; ">
+					<button class="clear" style="margin-left: auto;" onclick="deleteCard()">Delete</button>
+					<button class="accent" onclick="saveEdits()">Save</button>
+
+				</div>
+			</div>
+		</div>
+
+		<div id="password-input-container">
+			<input id="password-input" placeholder="Password" value="123">
+			<button class="accent" onclick="submitPassword()">Log in</button>
+		</div>
+
+		<button onclick="newBoard()">New Board</button>
+		<button onclick="deleteCurrentBoard()">Delete Current Board</button>
+		<div id="board-list"></div>
+		<div id="board-container">
+			<h1 id="board-name">-</h1>
+			<div id="board-content"></div>
+		</div>
+
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="./script.js"></script>
+
+</body>
+
+</html>
