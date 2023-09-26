@@ -24,8 +24,10 @@
 
 	<template id="card-template">
 		<div class="card">
-			<!-- <button>Star</button> -->
-			<button style="float: right;" class="edit-btn">Edit</button>
+			<div class="actions">
+				<button class="edit-btn">Edit</button>
+				<button>Star</button>
+			</div>
 			<img class="img">
 			<div style="display: flex; margin-left: 8px; margin-right: 8px; flex-direction: column;
 		">
@@ -35,17 +37,16 @@
 					<a class="url"></a>
 				</div>
 			</div>
-
 		</div>
 	</template>
 
 	<div id="app">
 
-		<div id="new-card-popup">
-			<div id="content">
+		<div id="new-card-popup" class="popup">
+			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>New Card</h3>
-					<button onclick="cancelNewCard()">X</button>
+					<button onclick="cancelNewCard()" class="clear">X</button>
 				</div>
 				<div id="dragdrop-container">
 					Drag and drop or click to browse
@@ -59,11 +60,11 @@
 			</div>
 		</div>
 
-		<div id="edit-card-popup">
-			<div id="content">
+		<div id="edit-card-popup" class="popup">
+			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>Edit Card</h3>
-					<button onclick="cancelEditCard()">X</button>
+					<button onclick="cancelEditCard()" class="clear">X</button>
 				</div>
 				<!-- <div id="dragdrop-container"> -->
 				<!-- Drag and drop or click to browse -->
@@ -73,9 +74,22 @@
 				<input type="text" id="text2-input" placeholder="Text 2">
 				<input type="text" id="url-input" placeholder="URL">
 				<div style="display: flex;gap: 8px; ">
-					<button class="clear" style="margin-left: auto;" onclick="deleteCard()">Delete</button>
+					<button class="clear" style="margin-left: auto;" onclick="deleteCardPopup()">Delete</button>
 					<button class="accent" onclick="saveEdits()">Save</button>
 
+				</div>
+			</div>
+		</div>
+
+		<div id="delete-card-popup" class="popup">
+			<div class="content">
+				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+					<h3>Delete Card</h3>
+					<button onclick="closeDeleteCardPopup()" class="clear">X</button>
+				</div>
+				<div style="display: flex;gap: 8px; ">
+					<button class="clear" style="margin-left: auto;" onclick="closeDeleteCardPopup()">Cancel</button>
+					<button class="red" onclick="deleteCard()">Delete</button>
 				</div>
 			</div>
 		</div>
@@ -85,8 +99,8 @@
 			<button class="accent" onclick="submitPassword()">Log in</button>
 		</div>
 
-		<button onclick="newBoard()">New Board</button>
-		<button onclick="deleteCurrentBoard()">Delete Current Board</button>
+		<button onclick="newBoard()" class="accent" style="margin: 32px 0 0 32px;  ">New Board</button>
+		<button onclick="deleteCurrentBoard()" style="float: right;" class="red">Delete Current Board</button>
 		<div id="board-list"></div>
 		<div id="board-container">
 			<h1 id="board-name">-</h1>

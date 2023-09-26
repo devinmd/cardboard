@@ -3,7 +3,9 @@
   --bg-l2: #fefeef;
   --bg: #f5f5e8;
   --bg-d1: #ecece1;
+  --bg-d1-ds: #e1e1d6;
   --bg-d2: #e3e3d8;
+  --bg-d2-ds: #d4d4c9;
   --bg-d3: #dadacc;
   --bg-d4: #d1d1c5;
   --bg-d5: #c8c8ba;
@@ -12,7 +14,8 @@
 
   --accent: #219653;
   --acent-d1: #1f814a;
-  --red: #e74c3c;
+  --red: #dc143c;
+  --red-d1: #b21030;
 
   --placeholder-text: #808080;
 }
@@ -43,14 +46,6 @@ body {
   width: 100vw;
 }
 
-button {
-  padding: 8px 12px;
-  color: var(--text);
-  background-color: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
 input {
   padding: 8px 12px;
   border-radius: 6px;
@@ -68,7 +63,7 @@ input:focus {
   border: 2px solid var(--accent);
 }
 
-#new-card-popup, #edit-card-popup {
+.popup {
   position: fixed;
   width: 100%;
   z-index: 999;
@@ -79,7 +74,7 @@ input:focus {
   justify-content: center;
 }
 
-#new-card-popup #content, #edit-card-popup #content {
+.popup .content {
   width: 30%;
   border-radius: 16px;
   margin-bottom: 10%;
@@ -91,11 +86,11 @@ input:focus {
   background-color: var(--bg);
 }
 
-#new-card-popup #content #dragdrop-container {
+#new-card-popup .content #dragdrop-container {
   border-radius: 6px;
 }
 
-#new-card-popup #content #dragdrop-container #dragdrop-input {
+#new-card-popup .content #dragdrop-container #dragdrop-input {
   color: var(--placeholder-text);
   padding: 16px 16px;
   background-color: var(--bg-l2);
@@ -105,14 +100,21 @@ input:focus {
   height: 100%;
 }
 
-#new-card-popup #content #dragdrop-container #dragdrop-input:hover {
+#new-card-popup .content #dragdrop-container #dragdrop-input:hover {
   border: 2px solid var(--bg-d1);
 }
 
-#board-container {
-  padding: 64px;
+#board-list {
+  padding: 32px 32px 0 32px;
+  display: flex;
+  flex-direction: row;
   gap: 16px;
-  max-width: 960px;
+}
+
+#board-container {
+  padding: 0 64px 64px 64px;
+  gap: 16px;
+  max-width: 1080px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -155,8 +157,26 @@ input:focus {
   background-color: var(--bg-d1);
 }
 
-.card button {
+
+.card:hover .actions {
+  display: flex;
+}
+
+.card .actions {
   position: absolute;
+  gap: 8px;
+  padding: 8px 4px;
+  display: none;
+  flex-direction: column;
+}
+
+.card .actions button {
+  padding: 0 4px;
+  background-color: transparent;
+}
+
+.card .actions button:hover {
+  text-decoration: underline;
 }
 
 .card .text1 {
@@ -181,7 +201,7 @@ img {
   object-fit: contain;
   border-radius: 8px;
   display: block;
-  background-color: var(--bg-d1);
+  background-color: var(--bg-l2);
   /* image-rendering: optimizeSpeed; 
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-crisp-edges; 
@@ -215,9 +235,16 @@ h4 {
   color: var(--text);
 }
 
+button {
+  transition: 80ms;
+  padding: 8px 12px;
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 button.accent {
   background-color: var(--accent);
-  transition: 80ms;
   color: var(--bg);
 }
 
@@ -237,4 +264,13 @@ button.clear {
 
 button.clear:hover {
   background-color: var(--bg-d1);
+}
+
+button.red {
+  background-color: var(--red);
+  color: var(--bg);
+}
+
+button.red:hover {
+  background-color: var(--red-d1);
 }

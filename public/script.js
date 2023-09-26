@@ -78,6 +78,7 @@ socket.on("boards_data_to_client", (data) => {
   for (let i in boardsData.boards) {
     let btn = document.createElement("button");
     btn.innerHTML = boardsData.boards[i];
+    btn.className = 'accent'
     btn.onclick = function () {
       currentBoardIndex = i;
       console.log(currentBoardIndex);
@@ -201,6 +202,24 @@ function saveEdits() {
   generateCards();
 }
 
-function deleteCard() {
+function closeDeleteCardPopup() {
   editIndex = -1;
+  document.querySelector("#delete-card-popup").style.display = "none";
+}
+
+function deleteCardPopup() {
+  document.querySelector("#edit-card-popup").style.display = "none";
+  document.querySelector("#delete-card-popup").style.display = "flex";
+}
+
+function deleteCard() {
+  // delete here
+  currentBoardData.items.splice(editIndex, 1);
+  updateBoard(currentBoardIndex);
+  generateCards();
+  closeDeleteCardPopup();
+}
+
+function zoom(amount) {
+  document.querySelector("#board-content").style.columnCount = amount
 }
