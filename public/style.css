@@ -1,6 +1,6 @@
 :root {
+  --bg-l2: #ffffef;
   --bg-l1: #fafaec;
-  --bg-l2: #fefeef;
   --bg: #f5f5e8;
   --bg-d1: #ecece1;
   --bg-d1-ds: #e1e1d6;
@@ -12,10 +12,13 @@
 
   --text: #101012;
 
-  --accent: #219653;
-  --acent-d1: #1f814a;
-  --red: #dc143c;
-  --red-d1: #b21030;
+  --acent-l1: #1f814a;
+  --accent: #1c6944;
+  --acent-d1: #135435;
+
+  --red-l1: #c92e31;
+  --red: #ba2528;
+  --red-d1: #ab1b1e;
 
   --placeholder-text: #808080;
 }
@@ -123,7 +126,7 @@ input:focus {
 
 #board-content {
   column-count: 4;
-  column-gap: 15px;
+  column-gap: 16px;
 }
 
 #new-card-button-container {
@@ -156,7 +159,6 @@ input:focus {
 .card:hover {
   background-color: var(--bg-d1);
 }
-
 
 .card:hover .actions {
   display: flex;
@@ -209,10 +211,6 @@ img {
   image-rendering: pixelated; 
   image-rendering: optimize-contrast; 
   -ms-interpolation-mode: nearest-neighbor;  */
-}
-
-#password-input-container {
-  padding: 32px;
 }
 
 h1 {

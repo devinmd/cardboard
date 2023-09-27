@@ -1,96 +1,7 @@
-const socket = io({ autoConnect: false });
-
-currentBoardIndex = -1;
+/*currentBoardIndex = -1;
 currentBoardData = {};
 boardsData = {};
 editIndex = -1;
-
-function submitPassword() {
-  // try and authorize
-  console.log("attempting to authorize with server");
-  socket.auth = { password: document.querySelector("#password-input").value };
-  socket.connect();
-
-  // listen for connect
-  socket.on("connect", () => {
-    console.log(`connected as ${socket.id}`);
-    document.querySelector("#password-input-container").remove();
-  });
-}
-
-socket.on("connect_error", (error) => {
-  console.log("access denied to server: " + error.message);
-});
-
-socket.on("board_data", (data) => {
-  // received the data for a board
-  console.log("received board");
-  console.log(data);
-  currentBoardData = data;
-  document.querySelector("#board-name").innerHTML = data.name;
-  document.title = `Cardboard - ${data.name}`;
-
-  generateCards();
-});
-
-function generateCards() {
-  // add new card button
-  document.querySelector("#board-content").innerHTML = "";
-  let clone1 = document.querySelector("#new-card-button-template").content.cloneNode(true);
-  document.querySelector("#board-content").append(clone1);
-
-  // add all cards
-  for (i in currentBoardData.items) {
-    let clone2 = document.querySelector("#card-template").content.cloneNode(true);
-    let item = currentBoardData.items[i];
-    if (item.image) {
-      clone2.querySelector(".img").src = `/resources/assets/${item.image}`;
-    } else {
-      clone2.querySelector(".img").style.display = "none";
-    }
-    clone2.querySelector(".text1").innerHTML = item.text1;
-    clone2.querySelector(".text2").innerHTML = item.text2;
-
-    if (item.url) {
-      let matches = item.url.match(/^(https?:\/\/)?(www\.)?([^/]+)/i);
-      if (matches && matches[3]) {
-        let baseurl = matches[3];
-        clone2.querySelector(".url").innerHTML = baseurl;
-        clone2.querySelector(".url").target = "_blank";
-        clone2.querySelector(".url").href = item.url;
-      }
-    }
-
-    let index = i;
-    clone2.querySelector(".edit-btn").onclick = function () {
-      editCard(index);
-    };
-    document.querySelector("#board-content").append(clone2);
-  }
-}
-
-socket.on("boards_data_to_client", (data) => {
-  console.log("received boards data");
-  document.querySelector("#board-list").innerHTML = "";
-  console.log(data);
-  boardsData = data;
-
-  for (let i in boardsData.boards) {
-    let btn = document.createElement("button");
-    btn.innerHTML = boardsData.boards[i];
-    btn.className = 'accent'
-    btn.onclick = function () {
-      currentBoardIndex = i;
-      console.log(currentBoardIndex);
-      loadBoard(currentBoardIndex);
-    };
-    document.querySelector("#board-list").append(btn);
-  }
-
-  currentBoardIndex = 0;
-
-  loadBoard(0);
-});
 
 function deleteCurrentBoard() {
   console.log(`deleting board ${currentBoardIndex}`);
@@ -102,12 +13,6 @@ function deleteCurrentBoard() {
 function newBoard() {
   console.log("creating new board");
   socket.emit("new_board", {});
-}
-
-function loadBoard(index) {
-  socket.emit("fetch_board", index);
-  console.log(`fetching board ${index}`);
-  document.querySelector("#board-content").innerHTML = "";
 }
 
 function newCardDialog() {
@@ -163,7 +68,7 @@ document.querySelector("#dragdrop-container").addEventListener("drop", (e) => {
     listItem.textContent = file.name;
     console.log(file);
   }
-});*/
+});*/ /*
 
 function uploadFile(file) {
   console.log("uploading file to backend");
@@ -221,5 +126,113 @@ function deleteCard() {
 }
 
 function zoom(amount) {
-  document.querySelector("#board-content").style.columnCount = amount
+  document.querySelector("#board-content").style.columnCount = amount;
+}*/
+
+async function fetchBoards() {
+  try {
+    // fetch all board data
+    console.log("fetching boards data");
+    const response = await fetch("/api/boards");
+    const boards = await response.json();
+    console.log("received boards data");
+    console.log(boards);
+    // generate buttons to switch boards
+    for (i in boards) {
+      let btn = document.createElement("button");
+      btn.innerHTML = boards[i];
+      let id = i;
+      btn.onclick = function () {
+        gotoBoard(id);
+      };
+      document.querySelector("#board-btns").append(btn);
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
+
+async function gotoBoard(id) {
+  try {
+    // fetch board data
+    console.log(`fetching board ${id}`);
+    const response = await fetch(`/api/board/${id}`);
+    const board = await response.json();
+    // generate cards
+    generateCards(board);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+function generateCards(boardData) {
+  console.log(`received board ${boardData.id}`);
+  console.log(boardData);
+
+  // clear existing cards
+  document.querySelector("#board-content").innerHTML = "";
+
+  // add new card button
+  let clone1 = document.querySelector("#new-card-button-template").content.cloneNode(true);
+  document.querySelector("#board-content").append(clone1);
+
+  // add cards
+  for (i in boardData.cards) {
+    let card = boardData.cards[i];
+    let cardTemplate = document.querySelector("#card-template").content.cloneNode(true);
+    if (card.image) {
+      cardTemplate.querySelector(".img").src = `/resources/assets/${card.image}`;
+    } else {
+      cardTemplate.querySelector(".img").style.display = "none";
+    }
+    cardTemplate.querySelector(".text1").innerHTML = card.text1;
+    cardTemplate.querySelector(".text2").innerHTML = card.text2;
+
+    if (card.url) {
+      let matches = card.url.match(/^(https?:\/\/)?(www\.)?([^/]+)/i);
+      if (matches && matches[3]) {
+        let baseurl = matches[3];
+        cardTemplate.querySelector(".url").innerHTML = baseurl;
+        cardTemplate.querySelector(".url").target = "_blank";
+        cardTemplate.querySelector(".url").href = card.url;
+      }
+    }
+
+    let index = i;
+    cardTemplate.querySelector(".edit-btn").onclick = function () {
+      openEditCardDialog(card, index);
+    };
+    document.querySelector("#board-content").append(cardTemplate);
+  }
+}
+
+function openEditCardDialog(card, index) {
+  editIndex = index;
+  console.log("editing card " + index);
+  document.querySelector("#edit-card-popup").style.display = "flex";
+  document.querySelector("#edit-card-popup #text1-input").value = card.text1;
+  document.querySelector("#edit-card-popup #text2-input").value = card.text2;
+  document.querySelector("#edit-card-popup #url-input").value = card.url;
+  document.querySelector("#edit-card-popup #save-edits-btn").onclick = function () {
+    saveCardEdits(card, index);
+  };
+}
+
+function saveCardEdits(card, index) {
+  console.log("saving edits to card " + index);
+  card.text1 = document.querySelector("#edit-card-popup #text1-input").value;
+  card.text2 = document.querySelector("#edit-card-popup #text2-input").value;
+  card.url = document.querySelector("#edit-card-popup #url-input").value;
+  // PUT into backend with index
+  closeEditCardDialog();
+}
+
+function closeEditCardDialog() {
+  document.querySelector("#edit-card-popup").style.display = "none";
+}
+
+function init() {
+  fetchBoards();
+}
+
+window.addEventListener("load", init());

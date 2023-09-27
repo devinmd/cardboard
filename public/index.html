@@ -64,7 +64,7 @@
 			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>Edit Card</h3>
-					<button onclick="cancelEditCard()" class="clear">X</button>
+					<button onclick="closeEditCardDialog()" class="clear">X</button>
 				</div>
 				<!-- <div id="dragdrop-container"> -->
 				<!-- Drag and drop or click to browse -->
@@ -75,7 +75,7 @@
 				<input type="text" id="url-input" placeholder="URL">
 				<div style="display: flex;gap: 8px; ">
 					<button class="clear" style="margin-left: auto;" onclick="deleteCardPopup()">Delete</button>
-					<button class="accent" onclick="saveEdits()">Save</button>
+					<button class="accent" id="save-edits-btn">Save</button>
 
 				</div>
 			</div>
@@ -94,10 +94,7 @@
 			</div>
 		</div>
 
-		<div id="password-input-container">
-			<input id="password-input" placeholder="Password" value="123">
-			<button class="accent" onclick="submitPassword()">Log in</button>
-		</div>
+		<div id="board-btns"></div>
 
 		<button onclick="newBoard()" class="accent" style="margin: 32px 0 0 32px;  ">New Board</button>
 		<button onclick="deleteCurrentBoard()" style="float: right;" class="red">Delete Current Board</button>
@@ -109,7 +106,6 @@
 
 	</div>
 
-	<script src="/socket.io/socket.io.js"></script>
 	<script src="./script.js"></script>
 
 </body>
