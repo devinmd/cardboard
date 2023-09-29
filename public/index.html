@@ -18,7 +18,7 @@
 
 	<template id="new-card-button-template">
 		<div id="new-card-button-container">
-			<button class="accent" onclick="newCardDialog()">New Card</button>
+			<button class="accent" id="new-card-btn">New Card</button>
 		</div>
 	</template>
 
@@ -42,25 +42,23 @@
 
 	<div id="app">
 
-		<div id="new-card-popup" class="popup">
+		<div id="new-card-dialog" class="dialog">
 			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>New Card</h3>
-					<button onclick="cancelNewCard()" class="clear">X</button>
+					<button onclick="closeNewCardDialog()" class="clear">X</button>
 				</div>
 				<div id="dragdrop-container">
-					Drag and drop or click to browse
-					<input id="dragdrop-input" type="file" onchange="previewFiles(this.files)">
-
+					<input id="dragdrop-input" type="file">
 				</div>
 				<input type="text" id="text1-input" placeholder="Text 1">
 				<input type="text" id="text2-input" placeholder="Text 2">
 				<input type="text" id="url-input" placeholder="URL">
-				<button class="accent" style="margin-left: auto;" onclick="createNewCard()">Create Card</button>
+				<button class="accent" style="margin-left: auto;" id="create-new-card-btn">Create Card</button>
 			</div>
 		</div>
 
-		<div id="edit-card-popup" class="popup">
+		<div id="edit-card-dialog" class="dialog">
 			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>Edit Card</h3>
@@ -74,30 +72,43 @@
 				<input type="text" id="text2-input" placeholder="Text 2">
 				<input type="text" id="url-input" placeholder="URL">
 				<div style="display: flex;gap: 8px; ">
-					<button class="clear" style="margin-left: auto;" onclick="deleteCardPopup()">Delete</button>
+					<button class="clear" style="margin-left: auto;" id="del-card-btn">Delete</button>
 					<button class="accent" id="save-edits-btn">Save</button>
 
 				</div>
 			</div>
 		</div>
 
-		<div id="delete-card-popup" class="popup">
+		<div id="delete-card-dialog" class="dialog">
 			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>Delete Card</h3>
-					<button onclick="closeDeleteCardPopup()" class="clear">X</button>
+					<button onclick="closeDeleteCardDialog()" class="clear">X</button>
 				</div>
 				<div style="display: flex;gap: 8px; ">
-					<button class="clear" style="margin-left: auto;" onclick="closeDeleteCardPopup()">Cancel</button>
+					<button class="clear" style="margin-left: auto;" onclick="closeDeleteCardDialog()">Cancel</button>
 					<button class="red" onclick="deleteCard()">Delete</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="del-board-dialog" class="dialog">
+			<div class="content">
+				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+					<h3>Delete Board</h3>
+					<button onclick="closeDeleteBoardDialog()" class="clear">X</button>
+				</div>
+				<div style="display: flex;gap: 8px; ">
+					<button class="clear" style="margin-left: auto;" onclick="closeDeleteBoardDialog()">Cancel</button>
+					<button class="red" id="confirm-del-board-btn">Delete</button>
 				</div>
 			</div>
 		</div>
 
 		<div id="board-btns"></div>
 
-		<button onclick="newBoard()" class="accent" style="margin: 32px 0 0 32px;  ">New Board</button>
-		<button onclick="deleteCurrentBoard()" style="float: right;" class="red">Delete Current Board</button>
+		<button onclick="newBoard()" class="accent" style="margin: 32px 0 0 32px;">New Board</button>
+		<button class="red" id="del-board-btn">Delete Current Board</button>
 		<div id="board-list"></div>
 		<div id="board-container">
 			<h1 id="board-name">-</h1>

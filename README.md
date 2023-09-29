@@ -4,7 +4,7 @@
 
 each board is a separate .json file under resources/boards
 
-all images are stored in one common folder under resources/assets
+all images are stored in one common folder under resources/uploads
 
 ## todo
 - fix the new board system and getting board names
