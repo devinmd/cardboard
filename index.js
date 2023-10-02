@@ -94,25 +94,33 @@ app.put("/api/board/:id/:index", (req, res) => {
 app.put("/api/board/:id/", (req, res) => {
   // create a new card
   // get current data
-  // const fileContent = JSON.parse(fs.readFileSync(`public/resources/boards/board-${req.params.id}.json`, "utf8"));
+  const fileContent = JSON.parse(fs.readFileSync(`public/resources/boards/board-${req.params.id}.json`, "utf8"));
 
   console.log(req.body);
-
-  /*
- 
-
-  req.body.image = req.body.image.name;
 
   fileContent.cards.push(req.body);
 
   // Synchronously write the modified content back to the file
   fs.writeFileSync(`public/resources/boards/board-${req.params.id}.json`, JSON.stringify(fileContent));
 
-  console.log(`Edited "board-${req.params.id}.json"`);*/
+  console.log(`Edited "board-${req.params.id}.json"`);
+});
+
+app.delete("/api/board/:id/:index", (req, res) => {
+  // delete a card
+  console.log(req.params.index);
+  const fileContent = JSON.parse(fs.readFileSync(`public/resources/boards/board-${req.params.id}.json`, "utf8"));
+  console.log(fileContent.cards[req.params.index]);
+
+  fileContent.cards.splice(req.params.index, 1);
+  // Synchronously write the modified content back to the file
+  fs.writeFileSync(`public/resources/boards/board-${req.params.id}.json`, JSON.stringify(fileContent));
+
+  console.log(`Edited "board-${req.params.id}.json"`);
 });
 
 app.post("/api/board", (req, res) => {
-  let newBoardId = "A";
+  let newBoardId = "c";
   try {
     // Synchronously write the content to the file
     let content = {

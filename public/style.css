@@ -10,15 +10,24 @@
   --bg-d4: #d1d1c5;
   --bg-d5: #c8c8ba;
 
+  --text-l7: #808090;
+  --text-l6: #70707e;
+  --text-l5: #60606c;
+  --text-l4: #50505a;
+  --text-l3: #404048;
+  --text-l2: #303036;
+  --text-l1: #202024;
   --text: #101012;
+  --text-d1: #000001;
 
-  --acent-l1: #1f814a;
-  --accent: #1c6944;
-  --acent-d1: #135435;
+  --accent: #1f814a;
+  --accent-d1: #1c6944;
+  --accent-d2: #135435;
 
   --red-l1: #c92e31;
   --red: #ba2528;
   --red-d1: #ab1b1e;
+  --red-d2: #991416;
 
   --placeholder-text: #808080;
 }
@@ -40,30 +49,30 @@ body,
   color: var(--placeholder-text);
 }
 
+p.label {
+  font-size: 16px;
+  margin: 8px 0 8px 0;
+  color: var(--text-l3);
+}
+
 body {
   background-color: var(--bg);
 }
 
-#app {
-  height: 100vh;
-  width: 100vw;
-}
-
-input {
+input,
+select {
   padding: 8px 12px;
   border-radius: 6px;
   border: 2px solid var(--bg-l2);
   transition: 80ms;
   background-color: var(--bg-l2);
   font-size: 14px;
-}
-
-input:hover {
-  border: 2px solid var(--bg-d1);
-}
-
-input:focus {
-  border: 2px solid var(--accent);
+  &:hover {
+    border: 2px solid var(--bg-d1);
+  }
+  &:focus {
+    border: 2px solid var(--accent);
+  }
 }
 
 .dialog {
@@ -83,12 +92,14 @@ input:focus {
   margin-bottom: 10%;
   display: flex;
   box-shadow: 0 4px 8px 2px #00000020;
-  gap: 16px;
   flex-direction: column;
   padding: 16px;
   background-color: var(--bg);
 }
 
+.dialog .content input {
+  margin-bottom: 8px;
+}
 #new-card-dialog .content #dragdrop-container {
   border-radius: 6px;
 }
@@ -151,9 +162,14 @@ input:focus {
 
 .card {
   border-radius: 8px;
-  padding: 8px;
   display: inline-block;
   width: 100%;
+  padding: 8px;
+}
+
+.card.priority {
+  border: 1px solid var(--accent);
+  padding: 7px;
 }
 
 .card:hover {
@@ -181,13 +197,41 @@ input:focus {
   text-decoration: underline;
 }
 
+.card .tag-list {
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.card .tag-chip {
+  font-size: 12px;
+  border-radius: 8px;
+  height: 16px;
+  display: flex;
+  padding: 0 6px;
+  align-items: center;
+}
+
 .card .text1 {
   font-size: 16px;
+  color: var(--text);
   margin-top: 4px;
   margin-bottom: 4px;
 }
 .card .text2 {
   font-size: 14px;
+  color: var(--text-l1);
+}
+
+.card.disabled .text1 {
+  text-decoration: line-through;
+  color: var(--text-l4);
+}
+.card.disabled .text2 {
+  text-decoration: line-through;
+  color: var(--text-l5);
 }
 
 .card .url {
@@ -247,7 +291,11 @@ button.accent {
 }
 
 button.accent:hover {
-  background-color: var(--acent-d1);
+  background-color: var(--accent-d1);
+}
+
+button.accent:active {
+  background-color: var(--accent-d2);
 }
 
 button.disabled {
@@ -264,6 +312,10 @@ button.clear:hover {
   background-color: var(--bg-d1);
 }
 
+button.clear:active {
+  background-color: var(--bg-d2);
+}
+
 button.red {
   background-color: var(--red);
   color: var(--bg);
@@ -271,4 +323,8 @@ button.red {
 
 button.red:hover {
   background-color: var(--red-d1);
+}
+
+button.red:active {
+  background-color: var(--red-d2);
 }

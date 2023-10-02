@@ -1,126 +1,3 @@
-/*currentBoardIndex = -1;
-currentBoardData = {};
-boardsData = {};
-editIndex = -1;
-
-function deleteCurrentBoard() {
-  console.log(`deleting board ${currentBoardIndex}`);
-  socket.emit("delete_board", {
-    board_id: currentBoardIndex,
-  });
-}
-
-function newBoard() {
-  console.log("creating new board");
-  socket.emit("new_board", {});
-}
-
-function newCardDialog() {
-  document.querySelector("#new-card-dialog").style.display = "flex";
-}
-
-function cancelNewCard() {
-  document.querySelector("#new-card-dialog").style.display = "none";
-  document.querySelector("#new-card-dialog #text1-input").value = "";
-  document.querySelector("#new-card-dialog #text2-input").value = "";
-  document.querySelector("#new-card-dialog #url-input").value = "";
-}
-
-function createNewCard() {
-  file = document.querySelector("#new-card-dialog #dragdrop-input").files[0];
-
-  currentBoardData.items.push({
-    image: file ? file.name : "",
-    text1: document.querySelector("#new-card-dialog #text1-input").value,
-    text2: document.querySelector("#new-card-dialog #text2-input").value,
-    url: document.querySelector("#new-card-dialog #url-input").value,
-  });
-  generateCards();
-  if (file) {
-    uploadFile(file);
-  }
-  console.log("created new card");
-  updateBoard(currentBoardIndex);
-  cancelNewCard();
-}
-
-// Prevent the default behavior of the browser when a file is dragged over the drop zone.
-/*
-document.querySelector("#dragdrop-container").adDEventListener("dragover", (e) => {
-  e.preventDefault();
-});
-
-// Handle the drop event when files are dropped onto the box.
-document.querySelector("#dragdrop-container").adDEventListener("drop", (e) => {
-  e.preventDefault();
-
-  // Get the dropped files from the event.
-  const files = e.dataTransfer.files;
-
-  // Display the file names in a list.
-  for (const file of files) {
-    const listItem = document.createElement("li");
-    listItem.textContent = file.name;
-    console.log(file);
-  }
-});*/ /*
-
-function uploadFile(file) {
-  console.log("uploading file to backend");
-  console.log(file);
-  socket.emit("upload", file, file.name, (status) => {
-    console.log(status);
-  });
-}
-
-function previewFiles(files) {
-  console.log("previewing file");
-  console.log(files);
-}
-
-function updateBoard(index) {
-  console.log("updating board json for " + index);
-  socket.emit("update_board", { index: index, data: currentBoardData });
-}
-
-function editCard(index) {
-  editIndex = index;
-  console.log(currentBoardData.items[editIndex]);
-  console.log("editing card " + index);
-  document.querySelector("#edit-card-dialog").style.display = "flex";
-  document.querySelector("#edit-card-dialog #text1-input").value = currentBoardData.items[editIndex].text1;
-  document.querySelector("#edit-card-dialog #text2-input").value = currentBoardData.items[editIndex].text2;
-  document.querySelector("#edit-card-dialog #url-input").value = currentBoardData.items[editIndex].url;
-}
-
-function saveEdits() {
-  currentBoardData.items[editIndex].text1 = document.querySelector("#edit-card-dialog #text1-input").value;
-  currentBoardData.items[editIndex].text2 = document.querySelector("#edit-card-dialog #text2-input").value;
-  currentBoardData.items[editIndex].url = document.querySelector("#edit-card-dialog #url-input").value;
-  updateBoard(currentBoardIndex);
-  cancelEditCard();
-  generateCards();
-}
-
-function closeDeleteCardDialog() {
-  editIndex = -1;
-  document.querySelector("#delete-card-dialog").style.display = "none";
-}
-
-function deleteCardDialog() {
-  document.querySelector("#edit-card-dialog").style.display = "none";
-  document.querySelector("#delete-card-dialog").style.display = "flex";
-}
-
-function deleteCard() {
-  // delete here
-  currentBoardData.items.splice(editIndex, 1);
-  updateBoard(currentBoardIndex);
-  generateCards();
-  closeDeleteCardDialog();
-}
-*/
-
 async function fetchAllBoards() {
   document.querySelector("#board-btns").innerHTML = "";
   try {
@@ -168,7 +45,7 @@ async function loadBoard(id) {
   }
 }
 
-function generateCards(boardData) {
+function generateCards(boardData, shuffle) {
   console.log(`received board ${boardData.id}`);
   console.log(boardData);
 
@@ -204,10 +81,27 @@ function generateCards(boardData) {
       }
     }
 
+    if(card.tags){
+      for(t in card.tags){
+        let tagBtn = document.createElement('button')
+        tagBtn.innerHTML = card.tags[t]
+        tagBtn.className = 'tag-chip accent'
+        cardTemplate.querySelector('.tag-list').append(tagBtn)
+      }
+    }
+
     let index = i;
     cardTemplate.querySelector(".edit-btn").onclick = function () {
       openEditCardDialog(card, index, boardData.id);
     };
+
+    if (card.status && card.status != 0) {
+      if (card.status == 1) {
+        // disabled
+        cardTemplate.querySelector(".card").classList.add("priority");
+      }
+    }
+
     document.querySelector("#board-content").append(cardTemplate);
   }
 }
@@ -215,14 +109,20 @@ function generateCards(boardData) {
 function openEditCardDialog(card, index, id) {
   console.log("editing card " + index);
   document.querySelector("#edit-card-dialog").style.display = "flex";
+  document.querySelector("#edit-card-dialog #text1-input").focus();
   document.querySelector("#edit-card-dialog #text1-input").value = card.text1;
   document.querySelector("#edit-card-dialog #text2-input").value = card.text2;
   document.querySelector("#edit-card-dialog #url-input").value = card.url;
+  document.querySelector("#edit-card-dialog #status-input").value = card.status;
+  if (card.tags) {
+    document.querySelector("#edit-card-dialog #tag-input").value = card.tags.join(", ");
+  }
+
   document.querySelector("#edit-card-dialog #save-edits-btn").onclick = function () {
     saveCardEdits(card, index, id);
   };
   document.querySelector("#edit-card-dialog #del-card-btn").onclick = function () {
-    openDeleteCardDialog(index);
+    openDeleteCardDialog(id, index);
   };
 }
 
@@ -254,6 +154,8 @@ function createNewCard(id) {
       .catch((error) => {
         console.error("Error uploading file:", error);
       });
+
+    loadBoard(id);
   }
 
   // create the object for the new card
@@ -287,11 +189,14 @@ function closeNewCardDialog() {
   document.querySelector("#new-card-dialog").style.display = "none";
 }
 
-function saveCardEdits(card, index, id) {
+function saveCardEdits(card, index, id, tagList) {
   console.log("saving edits to card " + index);
   card.text1 = document.querySelector("#edit-card-dialog #text1-input").value;
   card.text2 = document.querySelector("#edit-card-dialog #text2-input").value;
   card.url = document.querySelector("#edit-card-dialog #url-input").value;
+  card.status = document.querySelector("#edit-card-dialog #status-input").value;
+  card.tags = document.querySelector("#edit-card-dialog #tag-input").value.toLowerCase().replaceAll(" ", "").split(",");
+
   console.log(card);
   // PUT into backend
   fetch(`/api/board/${id}/${index}`, {
@@ -319,16 +224,6 @@ function openDeleteBoardDialog(id) {
   };
 }
 
-function closeDeleteBoardDialog() {
-  console.log("close delete board dialog");
-  document.querySelector("#del-board-dialog").style.display = "none";
-}
-
-function closeEditCardDialog() {
-  console.log("close edit card dialog");
-  document.querySelector("#edit-card-dialog").style.display = "none";
-}
-
 function deleteBoard(id) {
   console.log(`deleting board ${id}`);
   // delete
@@ -347,8 +242,27 @@ function deleteBoard(id) {
   fetchAllBoards();
 }
 
-function openDeleteCardDialog(index) {
+function openDeleteCardDialog(id, index) {
   console.log("opening delete card dialog for " + index);
+  closeEditCardDialog();
+  document.querySelector("#del-card-dialog").style.display = "flex";
+  document.querySelector("#confirm-delete-card-btn").onclick = function () {
+    deleteCard(id, index);
+  };
+}
+
+function deleteCard(id, index) {
+  fetch(`/api/board/${id}/${index}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  closeDeleteCardDialog();
+  loadBoard(id);
 }
 
 function init() {
@@ -367,6 +281,21 @@ function newBoard() {
     });
   // fetch the boards again
   fetchAllBoards();
+}
+
+function closeDeleteCardDialog() {
+  console.log("close delete card dialog");
+  document.querySelector("#del-card-dialog").style.display = "none";
+}
+
+function closeDeleteBoardDialog() {
+  console.log("close delete board dialog");
+  document.querySelector("#del-board-dialog").style.display = "none";
+}
+
+function closeEditCardDialog() {
+  console.log("close edit card dialog");
+  document.querySelector("#edit-card-dialog").style.display = "none";
 }
 
 window.addEventListener("load", init());

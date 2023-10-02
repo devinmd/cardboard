@@ -23,21 +23,32 @@
 	</template>
 
 	<template id="card-template">
+
 		<div class="card">
 			<div class="actions">
 				<button class="edit-btn">Edit</button>
 				<button>Star</button>
 			</div>
+
 			<img class="img">
-			<div style="display: flex; margin-left: 8px; margin-right: 8px; flex-direction: column;
-		">
+
+			<div style="display: flex; margin-left: 8px; margin-right: 8px; flex-direction: column; ">
+
 				<p class="text1"></p>
+
 				<div style="display: flex; justify-content: space-between; align-items: center;">
+
 					<p class="text2"></p>
 					<a class="url"></a>
+
 				</div>
+
+				<div class="tag-list"></div>
+
 			</div>
+
 		</div>
+
 	</template>
 
 	<div id="app">
@@ -60,7 +71,7 @@
 
 		<div id="edit-card-dialog" class="dialog">
 			<div class="content">
-				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 4px;">
 					<h3>Edit Card</h3>
 					<button onclick="closeEditCardDialog()" class="clear">X</button>
 				</div>
@@ -68,10 +79,26 @@
 				<!-- Drag and drop or click to browse -->
 				<!-- <input id="dragdrop-input" type="file" onchange="previewFiles(this.files)"> -->
 				<!-- </div> -->
+				<p class="label">Text</p>
 				<input type="text" id="text1-input" placeholder="Text 1">
 				<input type="text" id="text2-input" placeholder="Text 2">
+
+				<p class="label">URL</p>
 				<input type="text" id="url-input" placeholder="URL">
-				<div style="display: flex;gap: 8px; ">
+
+				<p class="label">Tags</p>
+				<div>
+					<div id="card-tags-list"></div>
+					<input type="text" placeholder="Add Tag..." id="tag-input">
+				</div>
+
+				<p class="label">Status</p>
+				<select id="status-input">
+					<option value="0">Default</option>
+					<option value="1">Priority</option>
+				</select>
+
+				<div style="display: flex;gap: 8px; margin-top: 16px; ">
 					<button class="clear" style="margin-left: auto;" id="del-card-btn">Delete</button>
 					<button class="accent" id="save-edits-btn">Save</button>
 
@@ -79,15 +106,15 @@
 			</div>
 		</div>
 
-		<div id="delete-card-dialog" class="dialog">
+		<div id="del-card-dialog" class="dialog">
 			<div class="content">
 				<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 					<h3>Delete Card</h3>
 					<button onclick="closeDeleteCardDialog()" class="clear">X</button>
 				</div>
-				<div style="display: flex;gap: 8px; ">
+				<div style="display: flex;gap: 8px; margin-top: 16px;">
 					<button class="clear" style="margin-left: auto;" onclick="closeDeleteCardDialog()">Cancel</button>
-					<button class="red" onclick="deleteCard()">Delete</button>
+					<button class="red" id="confirm-delete-card-btn">Delete</button>
 				</div>
 			</div>
 		</div>
@@ -98,7 +125,7 @@
 					<h3>Delete Board</h3>
 					<button onclick="closeDeleteBoardDialog()" class="clear">X</button>
 				</div>
-				<div style="display: flex;gap: 8px; ">
+				<div style="display: flex;gap: 8px; margin-top: 16px; ">
 					<button class="clear" style="margin-left: auto;" onclick="closeDeleteBoardDialog()">Cancel</button>
 					<button class="red" id="confirm-del-board-btn">Delete</button>
 				</div>
