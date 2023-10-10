@@ -1,3 +1,4 @@
 node_modules/*
 public/resources/uploads/*
 public/resources/boards/*
+.DS_Store

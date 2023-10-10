@@ -11,6 +11,7 @@ async function fetchAllBoards() {
     for (index in Object.keys(boards)) {
       let id = Object.keys(boards)[index];
       let btn = document.createElement("button");
+      btn.className = 'accent'
       btn.innerHTML = boards[id];
       btn.onclick = function () {
         loadBoard(id);

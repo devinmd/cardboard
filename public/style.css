@@ -1,14 +1,13 @@
 :root {
-  --bg-l2: #ffffef;
-  --bg-l1: #fafaec;
-  --bg: #f5f5e8;
-  --bg-d1: #ecece1;
-  --bg-d1-ds: #e1e1d6;
-  --bg-d2: #e3e3d8;
-  --bg-d2-ds: #d4d4c9;
-  --bg-d3: #dadacc;
-  --bg-d4: #d1d1c5;
-  --bg-d5: #c8c8ba;
+
+  --bg-l2: #ffffff;
+  --bg-l1: #fffffc;
+  --bg: #fcfcfa; /* slight yellow tint */
+  --bg-d1: #f4f4eb;
+  --bg-d2: #eaeadd;
+  --bg-d3: #ddddd2;
+  --bg-d4: #d3d3c7;
+  --bg-d5: #c5c5b7;
 
   --text-l7: #808090;
   --text-l6: #70707e;

@@ -96,8 +96,6 @@ app.put("/api/board/:id/", (req, res) => {
   // get current data
   const fileContent = JSON.parse(fs.readFileSync(`public/resources/boards/board-${req.params.id}.json`, "utf8"));
 
-  console.log(req.body);
-
   fileContent.cards.push(req.body);
 
   // Synchronously write the modified content back to the file
